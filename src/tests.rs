@@ -1,23 +1,41 @@
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
     use crate::icons;
     use crate::icons::remove_extension;
     use crate::icons::sanitize_filename;
     use crate::icons::search_icons;
+    use std::path::Path;
 
+    /// tests enum names from files
     #[test]
-    fn test_sanitize_basic() {
-        assert_eq!(sanitize_filename("ch*eck_box.jpg"), "CheckBox");
-        assert_eq!(sanitize_filename("search-icon@2x.svg"), "SearchIcon2x");
-        assert_eq!(sanitize_filename("home page.png"), "HomePage");
-        assert_eq!(sanitize_filename("settings@dark-mode.svg"), "SettingsDarkMode");
-        assert_eq!(sanitize_filename("123-start.svg"), "_123Start");
-        assert_eq!(sanitize_filename("!weird__name!.svg"), "WeirdName");
-        assert_eq!(sanitize_filename("CAPSLOCK.PNG"), "CAPSLOCK");
+    fn test_sanitize_basic_mapping() {
+        // Use Some("Expected") for valid icons, None for ignored files
+        let test_cases = vec![
+            ("ch*eck_box.jpg", Some("CheckBox")),
+            ("search-icon@2x.svg", Some("SearchIcon2x")),
+            ("home page.png", Some("HomePage")),
+            ("settings@dark-mode.svg", Some("SettingsDarkMode")),
+            ("123-start.svg", Some("_123Start")),
+            ("!weird__name!.svg", Some("WeirdName")),
+            ("CAPSLOCK.PNG", Some("CAPSLOCK")),
+            ("multi   space  name.jpg", Some("MultiSpaceName")),
+            ("icon.v1.2.png", Some("IconV12")),
+            ("a.png", Some("A")),
+            ("2025.png", Some("_2025")),
+            ("LICENSE", None),
+            (".gitignore", None),
+            ("café-icon.svg", Some("CafeIcon")),
+        ];
+
+        for (input, expected) in test_cases {
+            let result = sanitize_filename(input);
+            println!("{} -> {:?}", input, result);
+            assert_eq!(result.as_deref(), expected.map(|s| s));
+        }
     }
 
+    /// test removing extensions
     #[test]
     fn test_remove_extension() {
         assert_eq!(remove_extension("file.txt"), "file");
@@ -48,7 +66,6 @@ mod tests {
 
     #[test]
     fn test_enum_generation() {
-
         let paths = search_icons("assets/icons").expect("Failed to read icon directory");
         let enum_file = icons::create_enum_text(&paths).unwrap();
         println!("{}", enum_file);
