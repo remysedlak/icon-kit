@@ -2,5 +2,7 @@
 name = "icon_folder"
 version = "0.1.0"
 edition = "2024"
-
-[dependencies]
+authors = ["Remy Sedlak <reymsedlak@gmail.com>"]
+description = "Rust library for creating an icon namespace for an asset directory"
+license = "MIT"
+repository = "https://github.com/remysedlak/icon_enums"
