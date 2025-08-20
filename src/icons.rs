@@ -60,3 +60,37 @@ pub fn search_icons(dir_path: &str) -> Result<Vec<String>, io::Error> {
 
     Ok(paths)
 }
+
+pub fn create_enum_text(paths: &Vec<String>) -> Result<String, io::Error> {
+
+    const START: &str = "pub enum Icon {";
+    const START_END_BRACKET: char = '}';
+    const MIDDLE: &str = "impl Icon { pub fn path(&self) -> &'static str { match self {";
+    const ICON_START: &str = "Icon::";
+    const ARROW: &str = " => ";
+    const  MIDDLE_BRACKET: &str = "}}}";
+
+    let mut enum_content = String::from("");
+    enum_content.push_str(START);
+    for path in paths {
+        enum_content.push_str(&sanitize_filename(&path));
+        enum_content.push(',');
+    }
+    enum_content.push(START_END_BRACKET);
+    enum_content.push_str(MIDDLE);
+
+    for path in paths {
+        enum_content.push_str(ICON_START);
+        enum_content.push_str(&sanitize_filename(&path));
+        enum_content.push_str(ARROW);
+
+        enum_content.push('"');
+        enum_content.push_str(&path.replace("\\", "/"));
+        enum_content.push('"');
+
+        enum_content.push_str(", ");
+    }
+    enum_content.push_str(MIDDLE_BRACKET);
+
+    Ok(enum_content)
+}

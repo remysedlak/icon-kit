@@ -2,6 +2,7 @@
 #[cfg(test)]
 mod tests {
     use std::path::Path;
+    use crate::icons;
     use crate::icons::remove_extension;
     use crate::icons::sanitize_filename;
     use crate::icons::search_icons;
@@ -41,8 +42,15 @@ mod tests {
 
         // Optional: print found paths for debugging
         for path_str in &paths {
-            println!("Found path: {}", path_str.replace("\\", "/"));
+            println!("Found path: {}", path_str.replace("\\\\", "/"));
         }
     }
 
+    #[test]
+    fn test_enum_generation() {
+
+        let paths = search_icons("assets/icons").expect("Failed to read icon directory");
+        let enum_file = icons::create_enum_text(&paths).unwrap();
+        println!("{}", enum_file);
+    }
 }
