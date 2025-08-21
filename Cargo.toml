@@ -1,9 +1,9 @@
 [package]
 name = "icon_enum"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["Remy Sedlak <reymsedlak@gmail.com>"]
-description = "Rust library for creating an icon namespace for an asset directory"
+description = "Rust CLI & library for creating an icon namespace for an asset directory"
 license = "MIT"
 repository = "https://github.com/remysedlak/icon_enum"
 readme = "README.md"
