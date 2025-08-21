@@ -3,7 +3,9 @@ use std::io;
 use std::io::Write;
 use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
- fn has_accent(c: char) -> bool {
+
+/// return true if a character has an accent
+fn has_accent(c: char) -> bool {
     c.nfkd().any(|d| {
         // combining diacritics are in the Unicode range \u{0300}–\u{036F}
         let u = d as u32;
@@ -11,6 +13,7 @@ use unicode_normalization::UnicodeNormalization;
     })
 }
 
+/// returns char without accent
 fn remove_accents_char(c: char) -> char {
     // Decompose the char
     for d in c.to_string().nfkd() {
@@ -26,7 +29,7 @@ fn remove_accents_char(c: char) -> char {
 
 /// Converts a filename into a valid Rust enum variant in PascalCase.
 /// Returns `None` if the filename is not a valid icon.
-pub (crate) fn sanitize_filename(filename: &str) -> Option<String> {
+fn sanitize_filename(filename: &str) -> Option<String> {
     if is_valid_icon(&filename) {
         // First, remove the file extension
         let stem = remove_extension(filename);
@@ -79,8 +82,8 @@ fn is_valid_icon(filename: &str) -> bool {
     };
 
     // Only allow certain extensions
-    let valid_exts = ["png", "jpg", "jpeg", "svg", "webp"];
-    if !valid_exts.contains(&ext.as_str()) {
+    let valid_extensions = ["png", "jpg", "jpeg", "svg", "webp"];
+    if !valid_extensions.contains(&ext.as_str()) {
         return false;
     }
 
@@ -158,7 +161,6 @@ pub fn create_enum_text(paths: &Vec<String>) -> Result<String, io::Error> {
     Ok(enum_content)
 }
 
-
 /// Generates the Rust enum text and saves it to the given output file.
 pub fn create_enum_file(input_dir: &str, output_file: &str) -> Result<(), io::Error> {
     let paths = search_icons(input_dir)?;
@@ -170,8 +172,8 @@ pub fn create_enum_file(input_dir: &str, output_file: &str) -> Result<(), io::Er
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
     use super::*;
+    use std::path::Path;
 
     /// tests enum names from files
     #[test]
@@ -200,45 +202,45 @@ mod tests {
             assert_eq!(result.as_deref(), expected.map(|s| s));
         }
     }
-        /// test removing extensions
-        #[test]
-        fn test_remove_extension() {
-            assert_eq!(remove_extension("file.txt"), "file");
-            assert_eq!(remove_extension("archive.tar.gz"), "archive.tar");
-            assert_eq!(remove_extension("no_extension"), "no_extension");
+    /// test removing extensions
+    #[test]
+    fn test_remove_extension() {
+        assert_eq!(remove_extension("file.txt"), "file");
+        assert_eq!(remove_extension("archive.tar.gz"), "archive.tar");
+        assert_eq!(remove_extension("no_extension"), "no_extension");
+    }
+
+    #[test]
+    fn test_icon_path() {
+        // Call search_icons and unwrap or assert success
+        let paths = search_icons("assets/icons").expect("Failed to read icon directory");
+
+        // Make sure at least one icon was found
+        assert!(!paths.is_empty(), "No icons found in directory");
+
+        // Optionally check that each path exists and is a file
+        for path_str in &paths {
+            let path = Path::new(path_str);
+            assert!(path.exists(), "File does not exist: {:?}", path);
+            assert!(path.is_file(), "Path is not a file: {:?}", path);
         }
 
-        #[test]
-        fn test_icon_path() {
-            // Call search_icons and unwrap or assert success
-            let paths = search_icons("assets/icons").expect("Failed to read icon directory");
-
-            // Make sure at least one icon was found
-            assert!(!paths.is_empty(), "No icons found in directory");
-
-            // Optionally check that each path exists and is a file
-            for path_str in &paths {
-                let path = Path::new(path_str);
-                assert!(path.exists(), "File does not exist: {:?}", path);
-                assert!(path.is_file(), "Path is not a file: {:?}", path);
-            }
-
-            // Optional: print found paths for debugging
-            for path_str in &paths {
-                println!("Found path: {}", path_str.replace("\\\\", "/"));
-            }
+        // Optional: print found paths for debugging
+        for path_str in &paths {
+            println!("Found path: {}", path_str.replace("\\\\", "/"));
         }
+    }
 
-        #[test]
-        fn test_enum_generation() {
-            let paths = search_icons("assets/icons").expect("Failed to read icon directory");
-            let enum_file = create_enum_text(&paths).unwrap();
-            println!("{}", enum_file);
-        }
+    #[test]
+    fn test_enum_generation() {
+        let paths = search_icons("assets/icons").expect("Failed to read icon directory");
+        let enum_file = create_enum_text(&paths).unwrap();
+        println!("{}", enum_file);
+    }
 
-        #[test]
-        fn test_file_save() -> Result<(), io::Error> {
-            let _ = create_enum_file("assets/icons", "icon.rs");
-            Ok(())
-        }
+    #[test]
+    fn test_file_save() -> Result<(), io::Error> {
+        let _ = create_enum_file("assets/icons", "icon.rs");
+        Ok(())
+    }
 }
