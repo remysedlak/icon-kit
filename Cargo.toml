@@ -1,6 +1,6 @@
 [package]
 name = "icon_enums"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 authors = ["Remy Sedlak <reymsedlak@gmail.com>"]
 description = "Rust library for creating an icon namespace for an asset directory"
@@ -10,3 +10,7 @@ readme = "README.md"
 
 [dependencies]
 unicode-normalization = "0.1.24"
+
+[[bin]]
+name = "icon_enums"       # this will be the CLI executable name
+path = "src/main.rs"      # points to your CLI source file
