@@ -1,6 +1,6 @@
 [package]
 name = "icon_enum"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 authors = ["Remy Sedlak <reymsedlak@gmail.com>"]
 description = "Rust library and CLI for generating enums from image asset folders"
