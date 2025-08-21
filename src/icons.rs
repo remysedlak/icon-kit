@@ -27,7 +27,7 @@ fn remove_accents_char(c: char) -> char {
 
 /// Converts a filename into a valid Rust enum variant in PascalCase.
 /// Returns `None` if the filename is not a valid icon.
-pub fn sanitize_filename(filename: &str) -> Option<String> {
+fn sanitize_filename(filename: &str) -> Option<String> {
     if is_valid_icon(&filename) {
         // First, remove the file extension
         let stem = remove_extension(filename);
@@ -70,7 +70,7 @@ pub fn sanitize_filename(filename: &str) -> Option<String> {
 }
 
 /// Returns `true` if the given file path points to a valid icon file.
-pub fn is_valid_icon(filename: &str) -> bool {
+fn is_valid_icon(filename: &str) -> bool {
     let path = Path::new(filename);
 
     // Must have an extension
@@ -95,7 +95,7 @@ pub fn is_valid_icon(filename: &str) -> bool {
 }
 
 /// Removes the file extension from a filename.
-pub fn remove_extension(filename: &str) -> &str {
+fn remove_extension(filename: &str) -> &str {
     Path::new(filename)
         .file_stem()
         .and_then(|s| s.to_str())
@@ -103,7 +103,7 @@ pub fn remove_extension(filename: &str) -> &str {
 }
 
 /// Returns a vector of icon file paths found in the given directory.
-pub fn search_icons(dir_path: &str) -> Result<Vec<String>, io::Error> {
+fn search_icons(dir_path: &str) -> Result<Vec<String>, io::Error> {
     let dir = Path::new(dir_path);
     let mut paths: Vec<String> = Vec::new();
 
@@ -161,7 +161,7 @@ pub fn create_enum_text(paths: &Vec<String>) -> Result<String, io::Error> {
 
 
 /// Generates the Rust enum text and saves it to the given output file.
-pub fn generate_enum_file(input_dir: &str, output_file: &str) -> Result<(), io::Error> {
+pub fn create_enum_file(input_dir: &str, output_file: &str) -> Result<(), io::Error> {
     let paths = search_icons(input_dir)?;
     let enum_text = create_enum_text(&paths)?;
     let mut file = fs::File::create(output_file)?;
