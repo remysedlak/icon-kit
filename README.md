@@ -1,4 +1,4 @@
-# icon_enums
+# icon_enum
 
 A small Rust crate for generating enums from icon filenames in a directory.  
 This is useful for creating a Rust-friendly namespace for your icons automatically.
@@ -6,7 +6,7 @@ This is useful for creating a Rust-friendly namespace for your icons automatical
 ## Code Usage
 
 ```rust
-use icon_enums::create_enum_file;
+use icon_enum::create_enum_file;
 
 let file = create_enum_file("assets/icons", "src/icon.rs"); // generate namespace
 ```
@@ -14,10 +14,10 @@ let file = create_enum_file("assets/icons", "src/icon.rs"); // generate namespac
 ## CLI  Usage
 
 ```text
-cargo run --bin icon_enums -- <icon directory> <enum output>
+cargo run --bin icon_enum -- <icon directory> <enum output>
 ```
 
 ### Example
 ```text
-cargo run --bin icon_enums -- assets/icons src/icon.rs
+cargo run --bin icon_enum -- assets/icons src/icon.rs
 ```

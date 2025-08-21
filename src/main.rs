@@ -1,11 +1,11 @@
-use icon_enums::{create_enum_file};
+use icon_enum::{create_enum_file};
 use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() != 3 {
-        eprintln!("Usage: icon_enums <input_dir> <output_file>");
+        eprintln!("Usage: icon_enum <input_dir> <output_file>");
         std::process::exit(1);
     }
 

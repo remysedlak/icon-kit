@@ -6,13 +6,13 @@
 /// # Usage
 ///
 /// ```text
-/// cargo run --bin icon_enums -- assets/icons icon.rs
+/// cargo run --bin icon_enum -- assets/icons icon.rs
 /// ```
 ///
 /// # Programmatic usage
 ///
 /// ```no_run
-/// use icon_enums::create_enum_file;
+/// use icon_enum::create_enum_file;
 /// create_enum_file("assets/icons", "icon.rs").unwrap();
 /// ```
 pub mod cli_docs {}
