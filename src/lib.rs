@@ -5,8 +5,9 @@
 ///
 /// # Usage
 ///
-/// ```text
-/// cargo run --bin icon_enum -- assets/icons icon.rs
+/// ```bash
+/// cargo install icon_enum // install globally
+/// icon_enum assets/icons src/icon.rs // apply to icons folder
 /// ```
 ///
 /// # Programmatic usage
