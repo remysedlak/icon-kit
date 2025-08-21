@@ -169,7 +169,7 @@ pub fn create_enum_text(paths: &Vec<String>) -> Result<String, io::Error> {
             enum_content.push_str(ARROW);
 
             enum_content.push('"');
-            enum_content.push_str(&name.replace("\\", "/"));
+            enum_content.push_str(&path.replace("\\", "/"));
             enum_content.push('"');
         }
 
