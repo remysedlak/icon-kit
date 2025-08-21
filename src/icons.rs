@@ -1,5 +1,6 @@
 use std::fs;
 use std::io;
+use std::io::Write;
 use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
@@ -45,7 +46,7 @@ pub fn sanitize_filename(filename: &str) -> Option<String> {
                 // Treat invalid character as word boundary
                 if matches!(c, '_' | '-' | '@' | ' ' | '.') {
                     capitalize_next = true;
-                } else if (has_accent(c)) {
+                } else if has_accent(c) {
                     sanitized.push(remove_accents_char(c))
                 }
             }
@@ -118,6 +119,7 @@ pub fn search_icons(dir_path: &str) -> Result<Vec<String>, io::Error> {
     Ok(paths)
 }
 
+/// Creates text for enum file
 pub fn create_enum_text(paths: &Vec<String>) -> Result<String, io::Error> {
     const START: &str = "pub enum Icon {";
     const START_END_BRACKET: char = '}';
@@ -153,4 +155,13 @@ pub fn create_enum_text(paths: &Vec<String>) -> Result<String, io::Error> {
     enum_content.push_str(MIDDLE_BRACKET);
 
     Ok(enum_content)
+}
+
+/// Creates enum file
+pub fn generate_enum_file(input_dir: &str, output_file: &str) -> Result<(), io::Error> {
+    let paths = search_icons(input_dir)?;
+    let enum_text = create_enum_text(&paths)?;
+    let mut file = fs::File::create(output_file)?;
+    file.write_all(enum_text.as_bytes())?;
+    Ok(())
 }

@@ -1,11 +1,9 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::icons;
-    use crate::icons::remove_extension;
-    use crate::icons::sanitize_filename;
-    use crate::icons::search_icons;
     use std::path::Path;
+    use icon_folder::{remove_extension, sanitize_filename, search_icons, create_enum_text};
+    use icon_folder::icons::generate_enum_file;
 
     /// tests enum names from files
     #[test]
@@ -67,7 +65,15 @@ mod tests {
     #[test]
     fn test_enum_generation() {
         let paths = search_icons("assets/icons").expect("Failed to read icon directory");
-        let enum_file = icons::create_enum_text(&paths).unwrap();
+        let enum_file = create_enum_text(&paths).unwrap();
         println!("{}", enum_file);
     }
+
+    #[test]
+    fn test_file_save() -> Result<(), std::io::Error> {
+        let file = generate_enum_file("assets/icons", "icon.rs");
+        Ok(())
+    }
+
+
 }
